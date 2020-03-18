@@ -13,6 +13,8 @@ public class RoomGen {
         RoomGen rg = new RoomGen();
 
     }
+    private int playerStartRoomX;
+    private int playerStartRoomY;
 
     RoomGen() {
         generate();
@@ -33,6 +35,7 @@ public class RoomGen {
             }
             System.out.println("");
         }
+        System.out.println("");
     }
 
     private void generate() {
@@ -44,7 +47,11 @@ public class RoomGen {
 //        }
         int startX = rand.nextInt(4);
         int startY = rand.nextInt(4);
-        //fillFloor(startX, startY);
+        
+        playerStartRoomX = startX;
+        playerStartRoomY = startY;
+        roomMap[startY][startX] = new int[10][10]; //create an empty room here
+        fillFloor(startX, startY);
         generateRoom(startX, startY);
         //printRoom(startX, startY);
     }
@@ -55,8 +62,8 @@ public class RoomGen {
         Direction[] neighbourDirections = Direction.values();
         Collections.shuffle(Arrays.asList(neighbourDirections));
         System.out.println("After:" + Arrays.toString(neighbourDirections));
-        roomMap[startY][startX] = new int[10][10];
-        fillFloor(startX, startY);
+        //roomMap[startY][startX] = new int[10][10];
+       // fillFloor(startX, startY);
 
         for (Direction d : neighbourDirections) {
 
@@ -69,7 +76,7 @@ public class RoomGen {
                     System.out.println("no Room in " + newRoomX + " " + newRoomY);
                     roomMap[newRoomY][newRoomX] = new int[10][10]; //create an empty room here
                     fillFloor(newRoomX, newRoomY); //fill the floor and build 4 walls
-        
+
              
                     //get door position in wall
                     int doorPos = rand.nextInt(3) + 3;
@@ -81,20 +88,29 @@ public class RoomGen {
                         //roomMap[startY][startX+1][doorPos + 2][0] = 3;
                         //use dShift to draw opposite wall of next door recursive call to next room room using dshift
                         roomMap[newRoomY][newRoomX][doorPos][0] = 3;
-                        
+                            printRoom(startY, startX);
+                             System.out.println("");
+
                         generateRoom(newRoomX, newRoomY);
                     }
                     if (d.getDirection() == Direction.LEFT) {
                         System.out.println("LEFT");
                         roomMap[startY][startX][doorPos][0] = 3;
-                        roomMap[newRoomY][newRoomX][doorPos][0] = 3;
+                        roomMap[newRoomY][newRoomX][doorPos][9] = 3;
+                        
+                                                    printRoom(startY, startX);
+                             System.out.println("");
+                        
                         
                         generateRoom(newRoomX, newRoomY);
                     }
                     if (d.getDirection() == Direction.UP) {
                         System.out.println("UP");
                         roomMap[startY][startX][0][doorPos] = 3;
-                        roomMap[newRoomY][newRoomX][0][doorPos] = 3;
+                        roomMap[newRoomY][newRoomX][9][doorPos] = 3;
+                        
+                                                    printRoom(startY, startX);
+                             System.out.println("");
                         
                         generateRoom(newRoomX, newRoomY);
                     }
@@ -103,11 +119,14 @@ public class RoomGen {
                         roomMap[startY][startX][9][doorPos] = 3;
                         roomMap[newRoomY][newRoomX][0][doorPos] = 3;
                         
+                                                    printRoom(startY, startX);
+                             System.out.println("");
+                        
                         generateRoom(newRoomX, newRoomY);
                     }
                     
                 }
-                printRoom(newRoomY, newRoomX);
+   
             }
 
         }
@@ -136,7 +155,7 @@ public class RoomGen {
     }
 
     private boolean validRoom(int newRoomX, int newRoomY) {
-        if ((newRoomX < 0 || newRoomX > 4) && (newRoomY < 0 || newRoomY > 4)) {
+        if ((newRoomX < 0 || newRoomX > 4) || (newRoomY < 0 || newRoomY > 4)) {
             return false;
         }
         return true;
