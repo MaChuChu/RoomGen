@@ -39,21 +39,15 @@ public class RoomGen {
     }
 
     private void generate() {
-//        for (int i = 0; i < 5; i++) {  //create null rooms - not needed any more
-//            for (int j = 0; j < 5; j++) {
-//                            roomMap[i][j]=null;
-//            }
-//
-//        }
+
         int startX = rand.nextInt(4);
         int startY = rand.nextInt(4);
-        
+
         playerStartRoomX = startX;
         playerStartRoomY = startY;
         roomMap[startY][startX] = new int[10][10]; //create an empty room here
         fillFloor(startX, startY);
         generateRoom(startX, startY);
-        //printRoom(startX, startY);
     }
 
     private void generateRoom(int startX, int startY) {
@@ -62,12 +56,9 @@ public class RoomGen {
         Direction[] neighbourDirections = Direction.values();
         Collections.shuffle(Arrays.asList(neighbourDirections));
         System.out.println("After:" + Arrays.toString(neighbourDirections));
-        //roomMap[startY][startX] = new int[10][10];
-       // fillFloor(startX, startY);
 
         for (Direction d : neighbourDirections) {
 
-            //System.out.println("shiftY" + d.shiftY + " shiftX " + d.shiftX);
             int newRoomY = startY + d.shiftY;
             int newRoomX = startX + d.shiftX;
             if (validRoom(newRoomX, newRoomY)) { // room co-ordinates are within range
@@ -77,19 +68,16 @@ public class RoomGen {
                     roomMap[newRoomY][newRoomX] = new int[10][10]; //create an empty room here
                     fillFloor(newRoomX, newRoomY); //fill the floor and build 4 walls
 
-             
                     //get door position in wall
                     int doorPos = rand.nextInt(3) + 3;
-                    
+
                     // add door in right wall of currentRoom and left wall of new room
                     if (d.getDirection() == Direction.RIGHT) {
                         System.out.println("RIGHT");
                         roomMap[startY][startX][doorPos][9] = 3; //draw door in wall of original room
-                        //roomMap[startY][startX+1][doorPos + 2][0] = 3;
-                        //use dShift to draw opposite wall of next door recursive call to next room room using dshift
                         roomMap[newRoomY][newRoomX][doorPos][0] = 3;
-                            printRoom(startY, startX);
-                             System.out.println("");
+                        printRoom(startY, startX);
+                        System.out.println("");
 
                         generateRoom(newRoomX, newRoomY);
                     }
@@ -97,36 +85,35 @@ public class RoomGen {
                         System.out.println("LEFT");
                         roomMap[startY][startX][doorPos][0] = 3;
                         roomMap[newRoomY][newRoomX][doorPos][9] = 3;
-                        
-                                                    printRoom(startY, startX);
-                             System.out.println("");
-                        
-                        
+
+                        printRoom(startY, startX);
+                        System.out.println("");
+
                         generateRoom(newRoomX, newRoomY);
                     }
                     if (d.getDirection() == Direction.UP) {
                         System.out.println("UP");
                         roomMap[startY][startX][0][doorPos] = 3;
                         roomMap[newRoomY][newRoomX][9][doorPos] = 3;
-                        
-                                                    printRoom(startY, startX);
-                             System.out.println("");
-                        
+
+                        printRoom(startY, startX);
+                        System.out.println("");
+
                         generateRoom(newRoomX, newRoomY);
                     }
                     if (d.getDirection() == Direction.DOWN) {
                         System.out.println("DOWN");
                         roomMap[startY][startX][9][doorPos] = 3;
                         roomMap[newRoomY][newRoomX][0][doorPos] = 3;
-                        
-                                                    printRoom(startY, startX);
-                             System.out.println("");
-                        
+
+                        printRoom(startY, startX);
+                        System.out.println("");
+
                         generateRoom(newRoomX, newRoomY);
                     }
-                    
+
                 }
-   
+
             }
 
         }
